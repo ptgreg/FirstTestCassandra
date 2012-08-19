@@ -1,0 +1,17 @@
+
+UserId
+   urls
+   
+   
+UserId
+  eventType 
+  
+  <!-- ColumnFamily: TaggedPosts A secondary index to determine which BlogEntries are associated with a tag Row Key => tag Column Names: a TimeUUIDType Column Value: row key into BlogEntries CF Access: get a slice of entries tagged 'foo' We're gonna use this CF to determine which blog entries to show for a tag page. We'll be a bit ghetto and use the string __notag__ to mean "don't restrict by tag". Each entry will get a column in here... this means we'll have to have #tags + 1 columns for each post. TaggedPosts : 
+  { // CF // blog entries tagged "guitar" guitar : 
+  	{ // Row key is the tag name // column names are TimeUUIDType, value is the row key into BlogEntries timeuuid_1 : i-got-a-new-guitar, timeuuid_2 : another-cool-guitar, }, 
+  	// here's all blog entries __notag__ : { timeuuid_1b : i-got-a-new-guitar, 
+  	// notice this is in the guitar Row as well timeuuid_2b : another-cool-guitar, 
+  	// and this is in the movie Row as well timeuuid_2b : scream-is-the-best-movie-ever, }, 
+  	// blog entries tagged "movie" movie: { timeuuid_1c: scream-is-the-best-movie-ever } } 
+  	--> <ColumnFamily CompareWith="TimeUUIDType" Name="TaggedPosts"/> 
+  
